@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cate">
+	<!-- 카테고리 리스트 출력-->
+	<select id="getList" resultType="categoryvo" parameterType="long">
+		<![CDATA[
+			SELECT rownum AS rnum, j.*
+            FROM (SELECT c.CATENO as cateNo, c.CATENAME as cateName , c.DESCRIPTION as description , count(p.POSTTITLE) AS countPost
+                 FROM CATEGORY c LEFT OUTER join POST p 
+                 ON c.cateNo=p.cateNo
+                 WHERE userNo = #{userNo}
+                 GROUP BY c.cateNo, c.CATENAME , c.DESCRIPTION ) j
+            ORDER BY rownum DESC   
+		]]>
+	
+	</select>
+	<!-- 카테고리 삭제 -->
+	<delete id="delete" parameterType="categoryvo">
+		<![CDATA[				
+			DELETE FROM CATEGORY WHERE CATENO =#{cateNo}
+		]]>
+	</delete>
+	
+	
+	<!-- max값인 cateNo랑 일치한 결과값 출력 -->
+	<select id="catelist" resultType="categoryvo">
+      <![CDATA[
+         select * from category
+         where cateNo = (select max(cateNo) from category)
+      ]]>
+   </select>
+	
+	
+	<!-- 카테고리 등록 -->
+	<insert id="cateinsert" parameterType="categoryvo">
+		<selectKey keyProperty="cateNo" resultType="int" order="BEFORE">
+			<![CDATA[
+				select seq_category_no.nextval from dual	
+			]]>
+		</selectKey>
+		<![CDATA[
+			insert into category
+			values (#{cateNo}, #{userNo}, #{cateName},#{description},sysdate)	
+		]]>
+		
+	</insert>
+	
+	
+	
+
+</mapper>

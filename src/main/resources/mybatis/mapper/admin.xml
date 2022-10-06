@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+
+
+	
+	<!-- 다른 블로거가 검색시 타이틀 로고 넣기 -->
+	<update id="update" parameterType="blogvo"><!-- long은 내장 alias -->
+	<![CDATA[
+		update blog 
+		set blogTitle = #{blogTitle} 
+	]]>  <!-- logoFile이 비워있지 않은 경우라면~ -->
+		<if test='!logoFile.equals("")'>
+			<![CDATA[
+				,logoFile=#{logoFile} 
+			]]>
+		</if>
+	<![CDATA[
+		where userNo=#{userNo} 
+	]]>
+	</update>
+	
+	
+</mapper>
