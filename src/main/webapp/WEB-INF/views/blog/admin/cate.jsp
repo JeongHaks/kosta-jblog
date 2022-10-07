@@ -74,6 +74,7 @@
                      if($('.no:eq(0)')[0]==undefinded){
                     	 resuleCate += "<td class='no'>1</td>"
                      }else{
+                    	 //https://hianna.tistory.com/480 innerHTML / innerText 참고사이트
                     	 resultCate += "<td class = 'no'>" + (Number($('no:eq(0)')[0].innerHTML)+1) +"</td>"
                      }
                      resultCate += "<td>" + obj[i]['cateName'] + "</td>"
@@ -82,6 +83,8 @@
                      resultCate += "<td>" + "<a href='${pageContext.servletContext.contextPath }/${authUser.id}/delete/"+cateNo+"' class='delete'> " + "<img src='${pageContext.request.contextPath}/assets/images/delete.jpg'></a>"  +"</td>"
                      resultCate += "</tr>"
                   }
+                  //.prepend()는 선택한 요소의 내용의 앞에 콘텐트를 추가합니다.
+                  //$( 'p' ).prepend( '123 ' ) => <p>123 Lorem Ipsum Dolor</p>
                   $("#result_data tbody").prepend(resultCate);
                },
                error : function(xhr,status, error){ // 에러났을 경우 알림을 띄워준다. 
@@ -97,9 +100,12 @@
 	function preventdelete(){
 		
 		//tr의 길이를 가져와서 for문을 돌려서 가져온다. class줬다 위에 리스트부분!
+		//getElementsByClassName(class 이름)
 		for(var i=0; i<document.getElementsByClassName('tr').length; i++ ){
 			//0보다 크면 지워지면 안된다 countPost수가 countPost class = 'count'
+			//엘리먼트 및 노드에 텍스트를 추가하거나 값을 가져올 수 있는 방법 = textContent
 			if((document.getElementsByClassName('count')[i].textContent) > 0){
+				//addEventListener은 이벤트를 등록하는 가장 권장되는 방식이다. 이 방식을 이용하면 여러개의 이벤트 핸들러를 등록할 수 있다
 				document.getElementsByClassName('delete')[i].addEventListener('click',function(e){//delete 버튼에 클릭 이벤트를 준다. 함수가 실행한다.
 					e.preventDefault(); //delete를 누르면 다른 창으로 가지 못 하게 해서 알람을 띄워준다.
 					alert('삭제할 수 없습니다.');

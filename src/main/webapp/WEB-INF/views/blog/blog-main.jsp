@@ -14,7 +14,15 @@
 //cateNo를 숨겨주기 위한 함수정의
 //카테고리 클릭 시 안에 내용 불러오기 
 	$(document).ready(function(){
-		
+		//아래에 class id를 활용해서 이용한다 
+		//https://ko.javascript.info/localstorage 참고자료 
+		//sessionStorage.  / localStorage. 
+		// setItem(key, value) – 키-값 쌍을 보관합니다.
+		// getItem(key) – 키에 해당하는 값을 받아옵니다.
+		// removeItem(key) – 키와 해당 값을 삭제합니다.
+		// clear() – 모든 것을 삭제합니다.
+		// key(index) – 인덱스(index)에 해당하는 키를 받아옵니다.
+		// length – 저장된 항목의 개수를 얻습니다.
 		var authUser = sessionStorage.getItem("authUser");
 		$('.cateNo').hide();
 		//카테고리 리스트에 카테고리 클릭 시 관련된 정보를 리스트로 뿌려준다.
@@ -26,7 +34,7 @@
 				$.ajax({
 					type : "GET",
 					data : {
-						cateNum : cateNo
+						cateNum : cateNo //cateNo의 값을 cateNum의 변수에 담아둔다.
 					},
 					async : false,
 					url : "${pageContext.request.contextPath }/${authUser.id}/categoryNo",
@@ -77,6 +85,7 @@
 						}else{
 							bloglist+= "<h4> 등록된 글이 없습니다.</h4>"
 						}
+						//.append() : 선택된 요소의 마지막에 새로운 요소나 콘텐츠를 추가한다.
 						$(".blog-content").append(bloglist);
 					},
 					error : function(xhr,status, error){ // 에러났을 경우 알림을 띄워준다. 
