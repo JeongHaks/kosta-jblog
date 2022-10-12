@@ -54,4 +54,32 @@
 			FROM post p , category c WHERE p.cateNo=c.cateNo and c.userNo=#{userNo} and c.cateNo=(select min(cateNo) from category) order by postNo desc
 		]]>
 	</select>
+	
+		<!-- 답글 리스트 -->
+	
+	
+	
+	<select resultType="commentsvo" parameterType="long" id="getCommentsNo"><!-- long은 내장 alias -->	
+		<![CDATA[
+				SELECT cc.CMTNO ,cc.POSTNO ,cc.USERNO ,cc.CMTCONTENT ,to_char(cc.regDate,'YYYY/MM/DD') as regDate ,cc.coname  
+				FROM comments cc , USERS u 
+				WHERE cc.USERNO = u.USERNO 
+				AND u.USERNO = #{userNo}
+				]]>
+	</select>
+	
+	<!-- 답변 등록 -->
+	<insert parameterType="commentsvo" id="addReply">
+		<selectKey resultType="int" order="BEFORE" keyProperty="cmtNo">
+	
+		<![CDATA[
+				select seq_comments_no.nextval from dual
+		]]>
+		</selectKey>
+	
+		<![CDATA[
+				INSERT INTO comments (cmtNo,postNo,userNo,CONAME ,CMTCONTENT ,REGDATE  )
+				values(#{cmtNo},#{postNo},#{userNo},#{coName},#{cmtContent},sysdate)
+		]]>
+	</insert>
 </mapper>

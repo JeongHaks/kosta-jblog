@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.jblog.repository.BlogDao;
 import com.jblog.vo.BlogVo;
 import com.jblog.vo.CategoryVo;
+import com.jblog.vo.CommentsVo;
 import com.jblog.vo.PostVo;
 
 
@@ -28,6 +29,16 @@ public class BlogService {
 		
 		return blogDao.getCateNo(userNo);
 	}
+	//답변 등록
+	public CommentsVo addReply(CommentsVo commentsvo) {
+		return blogDao.addReply(commentsvo);
+	}
+	
+	//답변 리스트
+	public List<CommentsVo> getCommentsList(int postNo){
+		return blogDao.getCommentsList(postNo);
+	}
+		
 	//카테고리에 리시트 뿌리기
 	public List<PostVo> getPostlist(int cateNo){
 		return blogDao.getPostlist(cateNo);

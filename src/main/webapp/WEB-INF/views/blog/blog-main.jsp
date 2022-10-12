@@ -130,7 +130,66 @@
 		) //postTitle click 닫힘
 		
 		//답변 리스트 / form 
-		
+		$('.postTitle').click(
+				function(e){
+					e.preventDefault();
+					var index=$('.postTitle').index(this);
+					var postNo=$(".postNo:eq(" + index + ")")[0].innerHTML;
+					$.ajax({
+						type : "GET",
+						data : {
+							postNum : postNo
+						},
+						async : false,
+						url : "${pageContext.servletContext.contextPath}/${blogvo.userNo}/getCommentsList",
+						success : function(obj){
+							$("#commentTable").empty();
+							var commentContent="";
+							commentContent += "<table class='commentTable'>"
+							for(var i=0; i<obj.length; i++){
+								commentContent += "<tr class='commentTr'>"
+								commentContent += "<td>" +obj[i]['coname']+ "</td>"
+								commentContent += "<td>" +obj[i]['cmtContent']+ "</td>"
+								commentContent += "<td>" +obj[i]['regDate']+ "</td>"
+								commentContent += "</tr>"
+							}
+							commentContent += "</table>"
+							$("#commentTable").append(commentContent);
+						},
+						error : function(xhr,status,error){
+							alert(error+"에러");
+						}
+					});
+				}		
+			)
+			//답변 등록 
+			$('.replySave').click(
+				var name = $(".name").text();
+				var replyContent = $('.replyContent')[0].value;
+				$.ajax({
+					type : "GET,
+					data : {
+						postNum : postNo,
+						name : name,
+						replyContent : replyContent
+					},
+					async : false,
+					url : "${pageContext.servletContext.contextPath}/${blogVo.userNo}/addReply",
+					success : function(obj){
+						console.log(obj)
+						var commentContent ="";
+						commentContent += "<tr>";
+						commentContent += "<td>"+obj['coName']+"</td>";
+						commentContent += "<td>"+obj['cmtContent']+"</td>"
+						commentContent += "<td>"+obj['regDate']+"</td>"
+						commentContent += "</tr>";
+						$(".commentTable").prepend(commentContent);
+					},
+					error : function(xhr,status,error){
+						alert(error+"에러");
+					}
+				});
+			)	
 });
 
 </script>
@@ -171,7 +230,39 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
+					<!-- 답변 리스트 및 저장  -->
+			
+			<div id="reply">
+               <c:if test="${!empty authUser.id}">
+                  <form>
+                     <table>
+                        <tr>
+                           <td class="name">${authUser.userName}</td>
+                           <td>
+                              <input type="text" class="replyContent"/>
+                           </td>
+                           <td>
+                              <input type="button" value="저장" class="replySave" />
+                           </td>
+                        </tr>
+                     </table>               
+                  </form>
+               </c:if>
+				<div id="commentTable">
+                  <table class="commentTable">
+                     <c:forEach var="commentsVo" items="${commentsvo}" step="1">
+                        <tr class="commentTr">
+                           <td>${commentsVo.coname}</td>
+                           <td>${commentsVo.cmtContent}</td>
+                           <td>${commentsVo.regDate}</td>
+                        </tr>
+                     </c:forEach>
+                  </table>
+               </div>
+             </div>
 				
+				
+			<!-- post내용 리스트  -->
 
 				<ul class="blog-list">
 					<c:forEach var="postvo" items="#{postvo }" step="1">

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jblog.vo.BlogVo;
 import com.jblog.vo.CategoryVo;
+import com.jblog.vo.CommentsVo;
 import com.jblog.vo.PostVo;
 
 //blog-main
@@ -25,7 +26,14 @@ public class BlogDao {
 	public BlogVo getBlog(String id) {
 		return sqlSession.selectOne("blog.getBlog",id);
 	}
-	
+	//답변 등록
+	public CommentsVo addReply(CommentsVo commentsvo) {
+		return sqlSession.insert("blog.addReply",commentsvo);
+	}
+	//답변 리스트 
+	public List<CommentsVo> getCommentsList(int postNo){
+		return sqlSession.selectList("blog.getCommentsList",postNo);
+	}
 	public List<CategoryVo> getCateNo(long userNo){
 		return sqlSession.selectList("blog.getCateNo",userNo);
 	}

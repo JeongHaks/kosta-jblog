@@ -43,6 +43,40 @@ public class BlogController {
 			return "blog/blog-main"; 
 		}
 	
+		//답변 등록
+		@ResponseBody
+		@RequestMapping(value="{userId}/addReply",method=RequestMethod.GET)
+		public CommentsVo addReply(@PathVariable("userNo") long userNo,
+						@RequestParam("postNum") String postNum,
+						@RequestParam("name") String name,
+						@RequestParam("replyContent") String replyContent) {
+				
+			int postNo = Integer.parseInt(postNum); //형변환
+			System.out.println("postNum" + postNum);
+			System.out.println("userNo"+userNo);
+			CommentsVo commentsvo = new CommentsVo();
+			commentsvo.setUserNo(userNo);
+			commentsvo.setConame(name);
+			commentsvo.setCmtContent(replyContent);
+			commentsvo.setPostNo(postNo);
+				
+			return blogservice.addReply(commentsvo);
+				
+		}
+			
+		//답변 리스트 
+		@ResponseBody
+		@RequestMapping(value="{userId}/getCommentsList",method=RequestMethod.GET)
+		public List<CommentsVo> getCommentsList(
+							@PathVariable("userId") String userId 
+							,@RequestParam("postNum") String postNum, Model model){
+				System.out.println("getCommentsList : " + postNum);
+				int postNo = Integer.parseInt(postNum);
+				System.out.println("getComment"+ blogservice.getCommentsList(postNo));
+				System.out.println("getCommentsList" + postNo);
+				return blogservice.getCommentsList(postNo);
+		}
+			
 		//기본설정화면에서 카테고리 클릭 시 cate.jsp로 이동
 		@RequestMapping(value="{id}/admin/cate",method=RequestMethod.GET)
 		public String cate(@PathVariable("id") String id,Model model) {	

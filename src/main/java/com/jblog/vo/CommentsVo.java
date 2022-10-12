@@ -7,6 +7,7 @@ public class CommentsVo {
    private int cmtNo;
    private int postNo;
    private long userNo;
+   private String coname;
    private String cmtContent;
    private String regDate;
    
